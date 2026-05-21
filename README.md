@@ -53,59 +53,32 @@
 
 ---
 
+
+## Option 3: Simple Text (Most reliable)
+
+If you want something that definitely won't break:
+
+```markdown
+
+
 ## 🏗 Architecture Overview
 
+**Data Flow:**
 
-┌─────────────────────────────────────────────────────────────────┐
-│ INTERNET ATTACKERS │
-│ Automated scanners, credential stuffers, human operators │
-└────────────┬────────────────────────────┬───────────────────────┘
-│ SSH (port 2222) │ HTTP (port 8080)
-▼ ▼
-┌────────────────────────┐ ┌────────────────────────┐
-│ SSH HONEYPOT SENSOR │ │ HTTP HONEYPOT SENSOR │
-│ (Node.js + ssh2) │ │ (Node.js + Express) │
-│ │ │ │
-│ • Fake login prompt │ │ • Fake admin panels │
-│ • Fake shell with │ │ • Fake API endpoints │
-│ command logging │ │ • Exposed file traps │
-└────────────┬───────────┘ └────────────┬───────────┘
-│ │
-└───────────┬───────────────────┘
-│ POST /api/ingest (with API key)
-▼
-┌─────────────────────────────────────────────────────────────────┐
-│ NODE.JS + EXPRESS BACKEND │
-│ │
-│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
-│ │ GeoIP │→│ Threat │→│ Fingerprint │ │
-│ │ Lookup │ │ Score (0-100)│ │ Classifier │ │
-│ └──────────────┘ └──────────────┘ └──────────────┘ │
-│ │ │ │ │
-│ └──────────────────┼──────────────────┘ │
-│ ▼ │
-│ ┌──────────────┐ │
-│ │ MongoDB │ │
-│ │ • Attacks │ │
-│ │ • Sessions │ │
-│ │ • Creds │ │
-│ └──────────────┘ │
-│ │ │
-│ ▼ (Socket.io broadcast) │
-└────────────────────────────┬────────────────────────────────────┘
-│ WebSocket (real-time)
-▼
-┌─────────────────────────────────────────────────────────────────┐
-│ REACT DASHBOARD │
-│ │
-│ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌─────────────┐ │
-│ │Live Attack │ │ World │ │Threat │ │ Credential │ │
-│ │Feed │ │ Map │ │Leaderboard │ │ Intelligence│ │
-│ └────────────┘ └────────────┘ └────────────┘ └─────────────┘ │
-│ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌─────────────┐ │
-│ │Attack │ │ Session │ │Per-IP │ │ Protocol │ │
-│ │Timeline │ │ Replay │ │Dossier │ │ Breakdown │ │
-│ └────────────┘ └────────────┘ └────────────┘ └─────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
+1. **Attackers** probe your public IP on ports 2222 (SSH) and 8080 (HTTP)
+2. **SSH Honeypot** (Node.js + ssh2) captures credentials and commands
+3. **HTTP Honeypot** (Node.js + Express) captures probes to /admin, /.env, etc.
+4. Sensors send data to **Backend API** (`POST /api/ingest`)
+5. Backend performs:
+   - GeoIP lookup (country, coordinates)
+   - Threat score calculation (0-100)
+   - Attacker fingerprinting (scanner/human/bot)
+6. Data saved to **MongoDB**
+7. Real-time broadcast via **Socket.io**
+8. **React Dashboard** updates instantly with:
+   - Live attack feed
+   - World map pins
+   - Credential intelligence table
+   - Session replay terminal
 
-text
+
