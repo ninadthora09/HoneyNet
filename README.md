@@ -3,7 +3,6 @@
 [![Node.js Version](https://img.shields.io/badge/Node.js-18%2B-brightgreen)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-6.0%2B-green)](https://www.mongodb.com/)
 [![React](https://img.shields.io/badge/React-18.2%2B-blue)](https://reactjs.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 > **A full-stack honeypot platform built entirely on the MERN stack + Node.js sensors (no Python required)** that attracts real internet attackers, fingerprints their behavior, scores their threat level, and streams everything live to a React dashboard.
 
