@@ -54,3 +54,58 @@
 ---
 
 ## 🏗 Architecture Overview
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│ INTERNET ATTACKERS │
+│ Automated scanners, credential stuffers, human operators │
+└────────────┬────────────────────────────┬───────────────────────┘
+│ SSH (port 2222) │ HTTP (port 8080)
+▼ ▼
+┌────────────────────────┐ ┌────────────────────────┐
+│ SSH HONEYPOT SENSOR │ │ HTTP HONEYPOT SENSOR │
+│ (Node.js + ssh2) │ │ (Node.js + Express) │
+│ │ │ │
+│ • Fake login prompt │ │ • Fake admin panels │
+│ • Fake shell with │ │ • Fake API endpoints │
+│ command logging │ │ • Exposed file traps │
+└────────────┬───────────┘ └────────────┬───────────┘
+│ │
+└───────────┬───────────────────┘
+│ POST /api/ingest (with API key)
+▼
+┌─────────────────────────────────────────────────────────────────┐
+│ NODE.JS + EXPRESS BACKEND │
+│ │
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │
+│ │ GeoIP │→│ Threat │→│ Fingerprint │ │
+│ │ Lookup │ │ Score (0-100)│ │ Classifier │ │
+│ └──────────────┘ └──────────────┘ └──────────────┘ │
+│ │ │ │ │
+│ └──────────────────┼──────────────────┘ │
+│ ▼ │
+│ ┌──────────────┐ │
+│ │ MongoDB │ │
+│ │ • Attacks │ │
+│ │ • Sessions │ │
+│ │ • Creds │ │
+│ └──────────────┘ │
+│ │ │
+│ ▼ (Socket.io broadcast) │
+└────────────────────────────┬────────────────────────────────────┘
+│ WebSocket (real-time)
+▼
+┌─────────────────────────────────────────────────────────────────┐
+│ REACT DASHBOARD │
+│ │
+│ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌─────────────┐ │
+│ │Live Attack │ │ World │ │Threat │ │ Credential │ │
+│ │Feed │ │ Map │ │Leaderboard │ │ Intelligence│ │
+│ └────────────┘ └────────────┘ └────────────┘ └─────────────┘ │
+│ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌─────────────┐ │
+│ │Attack │ │ Session │ │Per-IP │ │ Protocol │ │
+│ │Timeline │ │ Replay │ │Dossier │ │ Breakdown │ │
+│ └────────────┘ └────────────┘ └────────────┘ └─────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+
+text
