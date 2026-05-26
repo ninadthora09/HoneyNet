@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
-const BACKEND = import.meta.env.VITE_API_URL;
+const BACKEND = console.log(import.meta.env.VITE_API_URL);
 
 export default function useSocket(eventName, maxItems = 50) {
 

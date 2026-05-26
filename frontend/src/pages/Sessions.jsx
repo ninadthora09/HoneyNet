@@ -8,7 +8,9 @@ export default function Sessions() {
 
   async function fetchSessions() {
     try {
-      const res = await axios.get("http://localhost:5000/api/sessions");
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/sessions`,
+      );
 
       setSessions(res.data);
     } catch (err) {

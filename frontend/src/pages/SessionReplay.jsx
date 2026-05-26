@@ -14,7 +14,7 @@ export default function SessionReplay() {
   async function fetchReplay() {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/sessions/${sessionId}`,
+        `${import.meta.env.VITE_API_URL}/api/sessions/${sessionId}`,
       );
 
       setSession(res.data);

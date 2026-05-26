@@ -13,7 +13,9 @@ export default function Dashboard() {
   useEffect(() => {
     async function fetchAttacks() {
       try {
-        const res = await axios.get("http://localhost:5000/api/attacks");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/attacks`,
+        );
 
         setAttacks(Array.isArray(res.data) ? res.data : res.data.attacks || []);
       } catch (err) {

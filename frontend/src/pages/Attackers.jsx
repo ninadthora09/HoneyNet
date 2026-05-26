@@ -8,7 +8,9 @@ export default function Attackers() {
   useEffect(() => {
     async function fetchAttackers() {
       try {
-        const res = await axios.get("http://localhost:5000/api/attackers");
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/attackers`,
+        );
 
         setAttackers(res.data);
       } catch (err) {
@@ -19,11 +21,11 @@ export default function Attackers() {
     fetchAttackers();
   }, []);
 
-//   const scoreColor = (score) => {
-//     if (score >= 70) return "text-red-400";
-//     if (score >= 40) return "text-yellow-400";
-//     return "text-cyan-400";  
-//   };
+  //   const scoreColor = (score) => {
+  //     if (score >= 70) return "text-red-400";
+  //     if (score >= 40) return "text-yellow-400";
+  //     return "text-cyan-400";
+  //   };
 
   return (
     <div className="p-6">
