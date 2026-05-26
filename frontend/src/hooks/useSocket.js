@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
-const BACKEND = "http://localhost:5000";
+const BACKEND = import.meta.env.VITE_API_URL;
 
 export default function useSocket(eventName, maxItems = 50) {
 
@@ -11,7 +11,9 @@ export default function useSocket(eventName, maxItems = 50) {
 
   useEffect(() => {
 
-    socketRef.current = io(BACKEND);
+    socketRef.current = io(BACKEND, {
+      transports: ["websocket"],
+    });
 
     socketRef.current.on(eventName, (data) => {
 
@@ -25,7 +27,7 @@ export default function useSocket(eventName, maxItems = 50) {
       socketRef.current.disconnect();
     };
 
-  }, []);
+  }, [eventName, maxItems]);
 
   return items;
 }
