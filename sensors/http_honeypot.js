@@ -9,23 +9,13 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = 8080;
 
 // Fake pages attackers usually probe
-const fakePages = [
-  "/admin",
-  "/login",
-  "/phpmyadmin",
-  "/.env",
-  "/config",
-];
+const fakePages = ["/admin", "/login", "/phpmyadmin", "/.env", "/config"];
 
 app.use(async (req, res) => {
-
-  const ip =
-    req.headers["cf-connecting-ip"] || req.ip;
+  const ip = req.headers["cf-connecting-ip"] || req.ip;
 
   // Detect login POST
-  const isLoginPost =
-    fakePages.includes(req.path) &&
-    req.method === "POST";
+  const isLoginPost = fakePages.includes(req.path) && req.method === "POST";
 
   // -----------------------------
   // GENERIC ATTACK LOGGING
@@ -36,63 +26,40 @@ app.use(async (req, res) => {
   // -----------------------------
 
   if (!isLoginPost) {
-
     const attack = {
-
       ip,
 
       method: req.method,
 
       path: req.originalUrl,
 
-      userAgent:
-        req.headers["user-agent"],
+      userAgent: req.headers["user-agent"],
 
       sensor: "http",
 
       timestamp: new Date(),
-
     };
 
     console.log("[HTTP ATTACK]", attack);
 
     try {
-
-      await axios.post(
-        "http://localhost:5000/api/ingest",
-        attack,
-        {
-          headers: {
-            "x-api-key":
-              "my-super-secret-key",
-          },
-        }
-      );
-
+      await axios.post("https://honeynet.onrender.com/api/ingest", attack, {
+        headers: {
+          "x-api-key": "my-super-secret-key",
+        },
+      });
     } catch (err) {
+      console.log("Backend ingest failed");
 
-      console.log(
-        "Backend ingest failed"
-      );
-
-      console.log(
-        err.response?.data ||
-        err.message
-      );
-
+      console.log(err.response?.data || err.message);
     }
-
   }
 
   // -----------------------------
   // FAKE LOGIN PAGE
   // -----------------------------
 
-  if (
-    fakePages.includes(req.path) &&
-    req.method === "GET"
-  ) {
-
+  if (fakePages.includes(req.path) && req.method === "GET") {
     return res.status(200).send(`
 
       <html>
@@ -145,7 +112,6 @@ app.use(async (req, res) => {
       </html>
 
     `);
-
   }
 
   // -----------------------------
@@ -153,65 +119,43 @@ app.use(async (req, res) => {
   // -----------------------------
 
   if (isLoginPost) {
-
     const loginAttack = {
-
       ip,
 
       method: req.method,
 
       path: req.originalUrl,
 
-      username:
-        req.body.username || "",
+      username: req.body.username || "",
 
-      password:
-        req.body.password || "",
+      password: req.body.password || "",
 
-      userAgent:
-        req.headers["user-agent"],
+      userAgent: req.headers["user-agent"],
 
       sensor: "http",
 
       timestamp: new Date(),
-
     };
 
-    console.log(
-      "[HTTP LOGIN ATTEMPT]",
-      loginAttack
-    );
+    console.log("[HTTP LOGIN ATTEMPT]", loginAttack);
 
     try {
-
       await axios.post(
-        "http://localhost:5000/api/ingest",
+        "https://honeynet.onrender.com/api/ingest",
         loginAttack,
         {
           headers: {
-            "x-api-key":
-              "my-super-secret-key",
+            "x-api-key": "my-super-secret-key",
           },
-        }
+        },
       );
-
     } catch (err) {
+      console.log("Backend ingest failed");
 
-      console.log(
-        "Backend ingest failed"
-      );
-
-      console.log(
-        err.response?.data ||
-        err.message
-      );
-
+      console.log(err.response?.data || err.message);
     }
 
-    return res
-      .status(401)
-      .send("Invalid credentials");
-
+    return res.status(401).send("Invalid credentials");
   }
 
   // -----------------------------
@@ -219,13 +163,8 @@ app.use(async (req, res) => {
   // -----------------------------
 
   res.status(404).send("Not Found");
-
 });
 
 app.listen(PORT, () => {
-
-  console.log(
-    `HTTP Honeypot running on port ${PORT}`
-  );
-
+  console.log(`HTTP Honeypot running on port ${PORT}`);
 });

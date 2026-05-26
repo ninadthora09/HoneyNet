@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios");
 
-const BACKEND_URL = "http://localhost:5000";
+const BACKEND_URL = "https://honeynet.onrender.com";
 const API_KEY = "my-super-secret-key";
 
 const { Server } = require("ssh2");
