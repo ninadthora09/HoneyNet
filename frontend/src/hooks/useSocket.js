@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 
-const BACKEND = console.log(import.meta.env.VITE_API_URL);
+const BACKEND = import.meta.env.VITE_API_URL;
+
+console.log(BACKEND);
 
 export default function useSocket(eventName, maxItems = 50) {
 
@@ -12,7 +14,7 @@ export default function useSocket(eventName, maxItems = 50) {
   useEffect(() => {
 
     socketRef.current = io(BACKEND, {
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
     });
 
     socketRef.current.on(eventName, (data) => {
@@ -30,4 +32,4 @@ export default function useSocket(eventName, maxItems = 50) {
   }, [eventName, maxItems]);
 
   return items;
-}
+} 
