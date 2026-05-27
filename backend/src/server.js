@@ -12,19 +12,20 @@ const connectDB = require("./config/db");
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigin =
+  "https://honey-a0mnjkbfs-ninads-projects-5f39b854.vercel.app";
+
 const io = new Server(server, {
   cors: {
-    origin: "https://honey-6eo0ypbsx-ninads-projects-5f39b854.vercel.app",
+    origin: allowedOrigin,
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
-emitter.init(io);
-
 app.use(
   cors({
-    origin: "https://honey-6eo0ypbsx-ninads-projects-5f39b854.vercel.app",
+    origin: allowedOrigin,
     credentials: true,
   }),
 );
