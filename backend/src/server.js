@@ -14,7 +14,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://honey-6eo0ypbsx-ninads-projects-5f39b854.vercel.app/",
+    origin: "https://honey-6eo0ypbsx-ninads-projects-5f39b854.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -22,7 +22,12 @@ const io = new Server(server, {
 
 emitter.init(io);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://honey-6eo0ypbsx-ninads-projects-5f39b854.vercel.app",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 connectDB();
