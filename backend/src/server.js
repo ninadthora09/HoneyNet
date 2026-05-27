@@ -23,6 +23,8 @@ const io = new Server(server, {
   },
 });
 
+emitter.init(io);
+
 app.use(
   cors({
     origin: allowedOrigin,
