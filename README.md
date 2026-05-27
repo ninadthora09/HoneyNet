@@ -1,5 +1,7 @@
 # HoneyNet — Real-Time Honeypot Intelligence Platform
 
+https://honey-a0mnjkbfs-ninads-projects-5f39b854.vercel.app/
+
 A full-stack honeypot intelligence platform built entirely using the **MERN stack + Node.js sensors** that captures, analyzes, fingerprints, and visualizes real-world cyber attacks in real time.
 
 HoneyNet deploys fake vulnerable services such as SSH servers, admin panels, exposed APIs, and sensitive file endpoints to attract attackers and collect threat intelligence data.
